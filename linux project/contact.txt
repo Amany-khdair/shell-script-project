@@ -1,0 +1,6 @@
+First name, Last name, phone numbers, email
+aziz, qarouch, 0987585753, aziz@birzeit.edu
+amany, khdair, 153649870, amany.khdair@gmail
+sara, amjad, 02154556666666, saramai
+hadeel, hadool, 0584933933, hadeel@gmail
+sara, jaber, 015478963, sara@gmail

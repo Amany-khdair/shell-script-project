@@ -1,0 +1,232 @@
+echo "Hello, could you please enter the name of the required file (contact.txt) ":
+#save the file name to use it in the code..
+read file 
+
+#if the entered name was the same as the given one then print the list
+if test -f "$file"
+then
+ echo "Welcome to Amany khdair and Hadeel Abdellatif contact management system"
+ echo 
+ echo -e "\tMAIN MENU"
+ echo =============================
+ echo [1] Add a new contact *~*
+ echo [2] List all contact *~*
+ echo [3] Search for contact *~*
+ echo [4] Edit a contact *~*
+ echo [5] Delete a contact *~*
+ echo [0] Exit *~*
+ echo =============================
+ echo Enter the choice :
+ #we saved the user choice in respond
+ read respond
+ 
+ while [ "$respond" -gt 0 ]
+ do
+  #if the user chooses number 1
+  if [ "$respond" -eq 1 ]
+  then
+    echo please enter the first name
+    read firstName
+    echo please enter the last name
+    read lastName
+    echo please enter the email
+    read email
+    echo please enter the phone number
+    read phoneNumber
+    
+    if [ -z "$firstName" ]
+    then 
+      firstName=" "
+    fi 
+    
+    if [ -z "$lastName" ]
+    then 
+      lastName=" " 
+    fi
+    
+    if [ -z "$email" ] 
+    then
+      email=" "
+    fi
+    if [ -z "$phoneNumber" ]
+    then 
+      echo please enter the phone number
+      read phoneNumber
+    fi
+    #to store the data into this file 
+    echo $phoneNumber > testnum.txt    
+    echo $email > testemail.txt
+    
+    emailvar=$(grep -ci "@" testemail.txt) 
+    numvar=$(grep -o [0-9] testnum.txt | wc -c)
+    numb=$(expr $numvar / 2)
+    if [ \( "$numb" -eq 9 -o "$numb" -eq 10 \) -a "$emailvar" != 0 ]
+    then 
+      echo "$firstName, $lastName, $phoneNumber, $email" >> $file 
+    echo your contacts are : 
+    cat "$file" 
+  else
+    echo ops! the information you entered are false or something missing please try again  
+  
+   
+   echo
+    fi
+ 
+  #if the user chooses number 2
+  elif [ "$respond" -eq 2 ]
+  then
+   echo select what you want to list :
+   echo [1] First name*~*
+   echo [2] Last name*~*
+
+   echo Enter the choice :
+   #we saved the user choice in option
+   read option
+   if [ "$option" -eq 1 ]
+   then
+   #this statement will print the first part in the original file which is the first name
+    #awk -F ',' '{ print $1 }' $file
+    sort $file
+   elif [ "$option" -eq 2 ]
+   then
+   #this statement will print the second part in the original file which is the last name
+    #awk -F ',' '{ print $2 }' $file
+    sort -k 2 $file
+   fi
+   
+   #if the user chooses number 3
+  elif [ "$respond" -eq 3 ]
+  then
+    tr ',' ' ' < $file | tr -s ' ' > newfile.txt
+    echo enter the word you wont to search : 
+    read search
+    word=$(grep -ci "$search" newfile.txt)
+    if [ "$word" -ne 0 ]
+    then
+     grep "$search" newfile.txt
+     else
+      echo word dose not exist
+    fi
+   
+   #if the user chooses number 4
+  elif [ "$respond" -eq 4 ]
+  then
+   echo select what you want to edit :
+   echo [1] First name*~*
+   echo [2] Last name*~*
+   echo [3] Phone numbers *~*
+   echo [4] Email *~*
+
+   echo Enter the choice :
+   #we saved the user choice in option
+   read option
+   if [ "$option" -eq 1 ]
+   then
+    echo enter the word you want to edit : 
+    read old
+    word=$(grep -ci "$old" $file)
+    if [ "$word" -ne 0 ]
+    then
+     echo enter the new data please
+     read new
+     echo "$new"
+     #cat $file
+     sed "s/$old/$new/g" "$file" > tempp.txt && mv tempp.txt "$file"
+     cat $file
+    else
+     echo word dose not exist
+    fi
+   
+     
+   elif [ "$option" -eq 2 ]
+   then
+    echo enter the word you want to edit : 
+    read old
+    word=$(grep -ci "$old" $file)
+    if [ "$word" -ne 0 ]
+    then
+     echo enter the new data please
+     read new
+     echo "$new"
+     #cat $file
+     sed "s/$old/$new/g" "$file" > tempp.txt && mv tempp.txt "$file"
+     cat $file
+    else
+     echo word dose not exist
+    fi
+    
+   elif [ "$option" -eq 3 ]
+   then
+    echo enter the word you want to edit : 
+    read old
+    word=$(grep -ci "$old" $file)
+    if [ "$word" -ne 0 ]
+    then
+     echo enter the new data please
+     read new
+     echo "$new"
+     #cat $file
+     sed "s/$old/$new/g" "$file" > tempp.txt && mv tempp.txt "$file"
+     cat $file
+    else
+     echo word dose not exist
+    fi
+     
+   elif [ "$option" -eq 4 ]
+   then
+    echo enter the word you want to edit : 
+    read old
+    word=$(grep -ci "$old" $file)
+    if [ "$word" -ne 0 ]
+    then
+     echo enter the new data please
+     read new
+     echo "$new"
+     #cat $file
+     sed "s/$old/$new/g" "$file" > tempp.txt && mv tempp.txt "$file"
+     cat $file
+    else
+     echo word dose not exist
+    fi
+    
+  fi
+  
+   #if the user chooses number 5
+  elif [ "$respond" -eq 5 ]
+  then
+    read delete
+     word=$(grep -ci "$delete" $file)
+     if [ "$word" -ne 0 ]
+     then
+      grep -v $delete $file > newfile.txt
+      cp newfile.txt contact.txt
+      echo The data has been modified to:
+      cat $file 
+     else
+      echo word dose not exist
+     fi
+   fi
+    
+  echo
+  echo
+  echo -e "\tMAIN MENU"
+  echo =============================
+  echo [1] Add a new contact *~*
+  echo [2] List all contact *~*
+  echo [3] Search for contact *~*
+  echo [4] Edit a contact *~*
+  echo [5] Delete a contact *~*
+  echo [0] Exit *~*
+  echo =============================
+  echo Enter the choice :
+  read respond
+ done
+  
+ if [ "$respond" -eq 0 ] 
+ then
+  echo "thanks for using our program :)"
+ fi
+  
+ else 
+  echo "'$file'ops! the file you tried to enter doesn't exist :("  
+ fi
